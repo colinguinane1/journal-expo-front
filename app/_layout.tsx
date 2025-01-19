@@ -7,12 +7,14 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import "../global.css";
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const queryClient = new QueryClient();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -28,6 +30,7 @@ export default function RootLayout() {
   }
 
   return (
+      <QueryClientProvider client={queryClient}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -35,5 +38,6 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+        </QueryClientProvider>
   );
 }
